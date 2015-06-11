@@ -33,4 +33,6 @@ persist.radio.multisim.config=dsds
 
 ro.telephony.ril_class=MediaTekRIL
 
+ro.telephony.ril.config=fakeiccid
+
 ro.opengles.version=131072
