@@ -19,13 +19,7 @@ on post-fs-data
     
     # Encrypt phone function
     setprop vold.post_fs_data_done 1
-
-#SeLinux
-    mkdir /data/ccci_cfg 0700 system radio
-    restorecon /data/ccci_cfg
-    restorecon_recursive /protect_f
-    restorecon_recursive /protect_s
-
+    
 service gsm0710muxd /system/bin/gsm0710muxd -s /dev/ttyC0 -f 512 -n 8 -m basic
     class core
     user root
@@ -51,9 +45,6 @@ service ril-daemon /system/bin/rild
     class core
     socket rild stream 660 root radio
     socket rild2 stream 660 root radio
-    socket rild3 stream 660 root radio
-    socket rild4 stream 660 root radio
-    socket rild-ims stream 660 root radio
     socket rild-debug stream 660 radio system
     socket rild-oem stream 660 radio system
     socket rild-mtk-ut stream 660 radio net_bt
@@ -89,11 +80,11 @@ service md_minilog_util /system/bin/md_minilog_util
 #  Modem related services (Begin)
 #
 
-#service permission_check /system/bin/permission_check
-#    class main
-#    user root
-#    group nvram
-#    oneshot
+service permission_check /system/bin/permission_check
+    class main
+    user root
+    group nvram
+    oneshot
 
 service ccci_fsd /system/bin/ccci_fsd 0
     user root
@@ -124,6 +115,7 @@ service pppd /system/bin/pppd file /data/misc/ppp/ppp_options
 #
 #  Modem related services (End)
 #
+#  moonrotation xda cm12
 
 #Add by vend_hp.chen for 
 #

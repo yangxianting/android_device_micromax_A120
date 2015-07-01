@@ -3,24 +3,27 @@ import init.modem.rc
 
 on init
     export LD_PRELOAD /system/lib/libxlog.so
-
-    mkdir /mnt/shell/emulated 0700 shell shell
-    mkdir /storage/emulated 0555 root root
-
-    mkdir /mnt/media_rw/sdcard1 0700 media_rw media_rw
-    mkdir /storage/sdcard1 0700 root root
-
-    export EXTERNAL_STORAGE /storage/emulated/legacy
-    export EMULATED_STORAGE_SOURCE /mnt/shell/emulated
-    export EMULATED_STORAGE_TARGET /storage/emulated
+    export EXTERNAL_STORAGE /storage/sdcard0
     export SECONDARY_STORAGE /storage/sdcard1
 
-    # Support legacy paths
-    symlink /storage/emulated/legacy /sdcard
-    symlink /storage/emulated/legacy /mnt/sdcard
-    symlink /storage/emulated/legacy /storage/sdcard0
-    symlink /mnt/shell/emulated/0 /storage/emulated/legacy
 
+
+    mkdir /storage/sdcard0 0700 root root
+    mkdir /storage/sdcard1 0700 root root
+
+    symlink /storage/sdcard0 /sdcard
+    symlink /storage/sdcard0 /mnt/sdcard
+
+    mkdir /mnt/media_rw/sdcard0 0700 media_rw media_rw
+    mkdir /mnt/media_rw/sdcard1 0700 media_rw media_rw
+
+
+    # USB OTG
+    mkdir /storage/usbotg 0700 root root
+    mkdir /mnt/media_rw/usbotg 0700 media_rw media_rw
+
+	
+	
     chown system graphics /dev/ion
     chmod 0644 /dev/ion
 
@@ -107,7 +110,7 @@ on init
 
     #Camera
     chmod 0660 /dev/camera-sysram
-    chmod 0660 /dev/camera-isp
+    chmod 0664 /dev/camera-isp
     chmod 0660 /dev/camera-pipemgr
     chmod 0660 /dev/kd_camera_hw
     chmod 0660 /dev/kd_camera_flashlight
@@ -175,6 +178,27 @@ on init
     chown system /sys/class/misc/m_mag_misc/magoactive
     chown system /sys/class/misc/m_mag_misc/magodelay
 
+    # Charge
+    chmod 0666 /dev/MT_pmic_adc_cali
+       
+    # Accdet
+    chown root radio /sys/devices/platform/Accdet_Driver/driver/accdet_call_state
+
+    # VideoCodec
+    mknod /dev/Vcodec c 160 0
+    chmod 0660 /dev/Vcodec
+    chown system media /dev/Vcodec
+
+    # MJC
+    chmod 0660 /dev/MJC
+    chown system media /dev/MJC
+
+    # kpd
+    chown radio radio /sys/devices/platform/mtk-kpd/driver/kpd_call_state
+
+    # Charging Battery
+    chown radio radio /sys/devices/platform/battery/Charging_CallState
+
     mkdir /data/amit/ 0770 system system
     mkdir /data/misc/sensor 0774 system system
     mkdir /data/misc/akmd 0770 system system
@@ -227,6 +251,22 @@ on init
     chmod 0770 /sys/power/tuxonice
     chmod 0220 /sys/power/tuxonice/do_hibernate
 
+    # FM Radio device node
+    mknod /dev/fm     c 193 0;
+    chmod 0660 /dev/fm
+    chown system media /dev/fm
+
+    # TV-out
+    chmod 0664 /dev/TV-out
+
+    #H DMI
+    chown meida system /dev/hdmitx
+    chmod 0664 /dev/hdmitx
+ 
+    # JPEG
+    chmod 0444 /dev/mtk_jpeg
+    chown system camera /dev/mtk_jpeg
+
 on post-fs-data
     mkdir /data/media 0770 media_rw media_rw
     chown media_rw media_rw /data/media
@@ -256,6 +296,15 @@ on post-fs-data
 
     start adbd
 
+# GPS
+    chown gps gps /dev/stpgps
+    chown gps gps /sys/class/gpsdrv/gps/pwrctl
+    chown gps gps /sys/class/gpsdrv/gps/suspend
+    chown gps gps /sys/class/gpsdrv/gps/state
+    chown gps gps /sys/class/gpsdrv/gps/pwrsave
+    chown gps gps /sys/class/gpsdrv/gps/status
+    chmod 0660 /dev/stpgps
+
 on post-fs
     exec /system/xbin/mknod /dev/wmtWifi c 153 0
     chmod 0660 /dev/wmtWifi
@@ -282,10 +331,10 @@ on post-fs
     chmod 0660 /dev/wmtdetect
     chown system system /dev/wmtdetect
 
-    mkdir /data/nvram 2770 root nvram
+    mkdir /data/nvram 2770 root system
     chmod 0770 /dev/nvram
 
-    chown ccci ccci /sys/kernel/ccci/boot
+    chown radio radio /sys/kernel/ccci/boot
 
     chown radio system /system/etc/ril
     chmod 0770 /system/etc/ril
@@ -379,7 +428,7 @@ service drvbd /system/bin/drvbd
 service nvram_daemon /system/bin/nvram_daemon
     class main
     user root
-    group nvram system
+    group nvram root
     oneshot
 
 service NvRAMAgent /system/bin/nvram_agent_binder
@@ -522,29 +571,31 @@ service mc64xxd /system/bin/mc64xxd
 #sensor service (end)
 #
 #
-#
-#
 
 service agpsd /system/bin/mtk_agpsd
     class main
     socket agpsd stream 660 gps system
     socket agpsd2 stream 660 gps system
     socket agpsd3 stream 660 gps system
-    user gps
+    user root
     group gps ccci inet sdcard_r sdcard_rw misc
 
 service mnld /system/xbin/mnld
-    user gps
+    user root
     group nvram gps inet misc sdcard_rw sdcard_r media_rw
     socket mnld stream 660 gps system
     disabled
 
 
 # virtual sdcard daemon running as media_rw (1023)
-service sdcard /system/bin/sdcard -u 1023 -g 1023 -l /data/media /mnt/shell/emulated
+service fuse_sdcard0 /system/bin/sdcard -u 1023 -g 1023 /mnt/media_rw/sdcard0 /storage/sdcard0
     class late_start
 
-service fuse_sdcard1 /system/bin/sdcard -u 1023 -g 1023 -w 1023 -d /mnt/media_rw/sdcard1 /storage/sdcard1
+    disabled
+service fuse_sdcard1 /system/bin/sdcard -u 1023 -g 1023 /mnt/media_rw/sdcard1 /storage/sdcard1
     class late_start
     disabled
 
+service fuse_usbotg /system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/usbotg /storage/usbotg
+    class late_start
+    disabled
