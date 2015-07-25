@@ -4,13 +4,13 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 # The gps config appropriate for this device
 $(call inherit-product, device/common/gps/gps_us_supl.mk)
 
-$(call inherit-product-if-exists, vendor/wiko/rainbow/rainbow-vendor.mk)
+$(call inherit-product-if-exists, vendor/micromax/A120/rainbow-vendor.mk)
 
 PRODUCT_CHARACTERISTICS := nosdcard
 
-DEVICE_PACKAGE_OVERLAYS += device/wiko/rainbow/overlay
+DEVICE_PACKAGE_OVERLAYS += device/micromax/A120/overlay
 
-LOCAL_PATH := device/wiko/rainbow
+LOCAL_PATH := device/micromax/A120
 ifeq ($(TARGET_PREBUILT_KERNEL),)
 	LOCAL_KERNEL := $(LOCAL_PATH)/kernel
 else
@@ -48,20 +48,20 @@ PRODUCT_PACKAGES += \
 
 # KEYLAYOUT
 PRODUCT_COPY_FILES += \
-    device/wiko/rainbow/rootdir/configs/mtk-kpd.kl:system/usr/keylayout/mtk-kpd.kl
+    device/micromax/A120/rootdir/configs/mtk-kpd.kl:system/usr/keylayout/mtk-kpd.kl
 
 # RAMDISK
 PRODUCT_COPY_FILES += \
-    device/wiko/rainbow/rootdir/root//sbin/busybox:root/sbin/busybox \
-    device/wiko/rainbow/rootdir/root/custom_init:root/custom_init \
-    device/wiko/rainbow/rootdir/root/factory_init.rc:root/factory_init.rc \
-    device/wiko/rainbow/rootdir/root/fstab.mt6582:root/fstab.mt6582 \
-    device/wiko/rainbow/rootdir/root/init.mt6582.rc:root/init.mt6582.rc \
-    device/wiko/rainbow/rootdir/root/init.modem.rc:root/init.modem.rc \
-    device/wiko/rainbow/rootdir/root/init.mt6582.usb.rc:root/init.mt6582.usb.rc \
-    device/wiko/rainbow/rootdir/root/init.recovery.mt6582.rc:root/init.recovery.mt6582.rc \
-    device/wiko/rainbow/rootdir/root/init.xlog.rc:root/init.xlog.rc \
-    device/wiko/rainbow/rootdir/root/ueventd.mt6582.rc:root/ueventd.mt6582.rc \
+    device/micromax/A120/rootdir/root//sbin/busybox:root/sbin/busybox \
+    device/micromax/A120/rootdir/root/custom_init:root/custom_init \
+    device/micromax/A120/rootdir/root/factory_init.rc:root/factory_init.rc \
+    device/micromax/A120/rootdir/root/fstab.mt6582:root/fstab.mt6582 \
+    device/micromax/A120/rootdir/root/init.mt6582.rc:root/init.mt6582.rc \
+    device/micromax/A120/rootdir/root/init.modem.rc:root/init.modem.rc \
+    device/micromax/A120/rootdir/root/init.mt6582.usb.rc:root/init.mt6582.usb.rc \
+    device/micromax/A120/rootdir/root/init.recovery.mt6582.rc:root/init.recovery.mt6582.rc \
+    device/micromax/A120/rootdir/root/init.xlog.rc:root/init.xlog.rc \
+    device/micromax/A120/rootdir/root/ueventd.mt6582.rc:root/ueventd.mt6582.rc \
     $(LOCAL_KERNEL):kernel
 
 # PERMISSIONS
@@ -112,8 +112,8 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES := \
     persist.sys.usb.config=mtp,adb
 
 PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
-PRODUCT_NAME := full_rainbow
-PRODUCT_DEVICE := rainbow
+PRODUCT_NAME := full_A120
+PRODUCT_DEVICE := A120
 
 TARGET_SCREEN_HEIGHT := 1280
 TARGET_SCREEN_WIDTH := 720

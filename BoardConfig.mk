@@ -1,5 +1,5 @@
 # inherit from the proprietary version
--include vendor/wiko/rainbow/BoardConfigVendor.mk
+-include vendor/micromax/A120/BoardConfigVendor.mk
 
 # Board
 TARGET_BOARD_PLATFORM := mt6582
@@ -16,7 +16,7 @@ TARGET_CPU_SMP := true
 TARGET_CPU_VARIANT := cortex-a7
 BOARD_HAS_NO_SELECT_BUTTON := true
 
-TARGET_BOOTLOADER_BOARD_NAME := rainbow
+TARGET_BOOTLOADER_BOARD_NAME := s5501
 
 # MTK Hardware
 BOARD_HAS_MTK_HARDWARE := true
@@ -50,12 +50,12 @@ TARGET_KMODULES := true
 COMMON_GLOBAL_CFLAGS += -DDISABLE_HW_ID_MATCH_CHECK
 TARGET_RUNNING_WITHOUT_SYNC_FRAMEWORK := true
 
-TARGET_PREBUILT_KERNEL := device/wiko/rainbow/kernel
-BOARD_CUSTOM_BOOTIMG_MK := device/wiko/rainbow/bootimg.mk
+TARGET_PREBUILT_KERNEL := device/micromax/A120/kernel
+BOARD_CUSTOM_BOOTIMG_MK := device/micromax/A120/bootimg.mk
 BOARD_MKBOOTIMG_ARGS := --board 1336460062
 #TARGET_PREBUILT_RECOVERY_KERNEL :=
 
-TARGET_RECOVERY_FSTAB := device/wiko/rainbow/rootdir/root/twrp.fstab
+TARGET_RECOVERY_FSTAB := device/micromax/A120/rootdir/root/twrp.fstab
 
 # TWRP
 DEVICE_RESOLUTION := 720x1280
@@ -88,10 +88,10 @@ USE_CAMERA_STUB := true
 BOARD_HAVE_BLUETOOTH := true
 BOARD_HAVE_BLUETOOTH_MTK := true
 BOARD_BLUETOOTH_DOES_NOT_USE_RFKILL := true
-BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/wiko/rainbow/bluetooth
+BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/micromax/A120/bluetooth
 
 # EGL settings
-BOARD_EGL_CFG := device/wiko/rainbow/rootdir/configs/egl.cfg
+BOARD_EGL_CFG := device/micromax/A120/rootdir/configs/egl.cfg
 USE_OPENGL_RENDERER := true
 BOARD_EGL_WORKAROUND_BUG_10194508 := true
 
@@ -99,7 +99,7 @@ TARGET_CPU_MEMCPY_OPT_DISABLE := true
 
 # SELINUX
 BOARD_SEPOLICY_DIRS := \
-       device/wiko/rainbow/sepolicy
+       device/micromax/A120/sepolicy
 
 BOARD_SEPOLICY_UNION := \
        device.te \
@@ -111,7 +111,7 @@ BOARD_SEPOLICY_UNION := \
 TARGET_USE_CUSTOM_LUN_FILE_PATH := "/sys/devices/virtual/android_usb/android0/f_mass_storage/lun%d/file"
 
 # RIL
-BOARD_RIL_CLASS := ../../../device/wiko/rainbow/ril/
+BOARD_RIL_CLASS := ../../../device/micromax/A120/ril/
 
 BOARD_CONNECTIVITY_VENDOR := MediaTek
 BOARD_CONNECTIVITY_MODULE := conn_soc
